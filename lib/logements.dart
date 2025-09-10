@@ -40,7 +40,7 @@ class _LogementsState extends State<Logements> {
 
     // Update `_logementData` to match backend DTO
     _logementData['prix_journalier'] = double.parse(_logementData['prix']);
-    _logementData.remove('prix'); // Remove temporary field
+    _logementData.remove('prix');
     _logementData['equipements'] = _selectedEquipments; // Ensure it's a list
     _logementData['disponibilites'] = _selectedDateRange != null
         ? [
@@ -52,7 +52,10 @@ class _LogementsState extends State<Logements> {
     try {
       final response = await http.post(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: jsonEncode(_logementData),
       );
 

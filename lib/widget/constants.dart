@@ -25,4 +25,6 @@ class AppColors {
   // Couleurs secondaires
   static const Color secondaryBeige = Color(0xFFD7AF78);
   static const Color secondaryRed = Color(0xFF852318);
+  static const Color secondaryLight = Color(0xFFF3E5F5);
+
 }

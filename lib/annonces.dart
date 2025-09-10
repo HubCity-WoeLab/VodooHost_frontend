@@ -44,7 +44,15 @@ class _AnnoncesPageState extends State<AnnoncesPage> {
                 } else if (value == 'Divinités') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Divinites()),
+                    MaterialPageRoute(
+                      builder: (context) => Divinites(
+                        onAddDivinite: (divinite) {
+                          setState(() {
+                            _logements.add(divinite);
+                          });
+                        },
+                      ),
+                    ),
                   );
                 } else if (value == 'Rituels') {
                   Navigator.push(
@@ -84,7 +92,13 @@ class _AnnoncesPageState extends State<AnnoncesPage> {
         body: TabBarView(
           children: [
             _buildLogementsTab(),
-            const Divinites(),
+            Divinites(
+              onAddDivinite: (divinite) {
+                setState(() {
+                  _logements.add(divinite);
+                });
+              },
+            ),
             const Rituels(),
           ],
         ),
