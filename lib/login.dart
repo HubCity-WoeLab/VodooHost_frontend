@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vodoo_host/bottomNav.dart';
 import 'register.dart';
 import 'forgotPassword.dart';
 import 'widget/constants.dart';
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         if (role == 'visiteur') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeVisitorPage()),
+            MaterialPageRoute(builder: (context) => const CustomBottomNavBar()),
           );
         } else if (role == 'hôte') {
           Navigator.pushReplacement(
