@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
+import 'bottomNav.dart';
 import 'widget/constants.dart';
 
 void main() {
@@ -20,16 +21,18 @@ class MyApp extends StatelessWidget {
           primary: AppColors.primaryPink,
           secondary: AppColors.secondaryBeige,
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.primaryGold,
-        ),
+        appBarTheme: AppBarTheme(backgroundColor: AppColors.primaryGold),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.secondaryRed,
           ),
         ),
       ),
-      home: const SplashScreen(),
+      // Configuration originale pour revenir au splash screen
+       home: const SplashScreen(),
+
+      // Configuration temporaire pour démarrer directement sur bottomNav
+      //home: const CustomBottomNavBar(),
     );
   }
 }

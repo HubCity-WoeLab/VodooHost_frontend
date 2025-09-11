@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vodoo_host/bottomNav.dart';
 import 'widget/constants.dart';
 import 'widget/custom_text_form_field.dart';
-import 'home_visitor.dart';
 import 'home_hote.dart';
 
 class OtpPage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _OtpPageState extends State<OtpPage> {
         if (role == 'visiteur') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeVisitorPage()),
+            MaterialPageRoute(builder: (context) => const CustomBottomNavBar()),
           );
         } else if (role == 'hôte') {
           Navigator.pushReplacement(
