@@ -127,6 +127,13 @@ class _MapPageState extends State<MapPage> {
                       );
                     }).toList(),
               ),
+
+              // Attribution obligatoire pour OpenStreetMap
+              const RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution('© OpenStreetMap contributors'),
+                ],
+              ),
             ],
           ),
 
