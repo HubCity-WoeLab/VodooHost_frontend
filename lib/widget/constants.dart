@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppConstants {
   // Base URL
-  // static const String baseUrl = 'http://192.168.1.97:3002/api'; (maison)
-  static const String baseUrl = 'http://192.168.1.72:3002/api'; // (Lab)
+  static const String baseUrl = 'http://192.168.1.69:3002/api'; //(maison-canal)
+
+  // static const String baseUrl = 'http://192.168.16.108:3002/api'; //(maison-cec)
+
+  // static const String baseUrl = 'http://192.168.1.72:3002/api'; // (Lab)
 
   // API Endpoints
   static const String login = '$baseUrl/auth/login';
@@ -11,6 +14,7 @@ class AppConstants {
   static const String forgotPassword = '$baseUrl/utilisateurs/forgot-password';
   static const String resetPassword = '$baseUrl/auth/reset-password';
   static const String otpcode = '$baseUrl/utilisateurs/verify-otp';
+  static const String createLogement = '$baseUrl/logements';
 }
 
 class AppColors {
@@ -21,4 +25,6 @@ class AppColors {
   // Couleurs secondaires
   static const Color secondaryBeige = Color(0xFFD7AF78);
   static const Color secondaryRed = Color(0xFF852318);
+  static const Color secondaryLight = Color(0xFFF3E5F5);
+
 }
