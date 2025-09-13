@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vodoo_host/search_result.dart';
 
 class GuestSelectionPage extends StatefulWidget {
   final String destination;
@@ -411,8 +412,8 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                         elevation: 2,
                       ),
                       onPressed: () {
-                        // Retourner toutes les données sélectionnées
-                        Map<String, dynamic> result = {
+                        // Préparer toutes les données de recherche
+                        Map<String, dynamic> searchData = {
                           'destination': widget.destination,
                           'selectedDay': widget.selectedDay,
                           'endDay': widget.endDay,
@@ -423,8 +424,16 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                           'infants': infants,
                           'pets': pets,
                         };
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                        Navigator.pop(context, result);
+
+                        // Naviguer vers la page des résultats
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    SearchResultsPage(searchData: searchData),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.search, color: Colors.white),
                       label: const Text(

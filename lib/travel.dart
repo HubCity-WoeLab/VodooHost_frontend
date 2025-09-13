@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'experience_detail.dart';
 
 class TripsPage extends StatelessWidget {
   const TripsPage({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class TripsPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          _buildExperiencesList(),
+          _buildExperiencesList(context),
         ],
       ),
     );
@@ -141,7 +142,7 @@ class TripsPage extends StatelessWidget {
   }
 
   /// --- Liste expériences ---
-  Widget _buildExperiencesList() {
+  Widget _buildExperiencesList(BuildContext context) {
     final experiences = [
       {
         "title": "Juste pour toi",
@@ -171,6 +172,7 @@ class TripsPage extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: _buildExperienceCard(
+                context,
                 exp["title"]!,
                 exp["subtitle"]!,
                 exp["image"]!,
@@ -181,55 +183,81 @@ class TripsPage extends StatelessWidget {
   }
 
   /// --- Carte Expérience ---
-  Widget _buildExperienceCard(String title, String subtitle, String image) {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.horizontal(
-              left: Radius.circular(12),
-            ),
-            child: Image.asset(
-              image,
-              height: 100,
-              width: 120,
-              fit: BoxFit.cover,
-            ),
+  Widget _buildExperienceCard(
+    BuildContext context,
+    String title,
+    String subtitle,
+    String image,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => ExperienceDetailPage(
+                  experience: {
+                    'title': title,
+                    'subtitle': subtitle,
+                    'image': image,
+                  },
+                ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.horizontal(
+                left: Radius.circular(12),
+              ),
+              child: Image.asset(
+                image,
+                height: 100,
+                width: 120,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -34,7 +34,7 @@ dependencies:
   http: ^1.0.0
   app_links: ^6.4.1
   intl_phone_field: ^3.1.0 # Use the latest version available
-  flutter_map: ^7.0.2
+  flutter_map: ^8.2.1
   latlong2: ^0.9.0
   image_picker: ^1.2.0
   shared_preferences: ^2.0.15

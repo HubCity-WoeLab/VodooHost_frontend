@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'search.dart';
 import 'map_page.dart';
+import 'property_detail.dart';
+import 'services/favorites_service.dart';
 
 class RealEstatePage extends StatefulWidget {
   const RealEstatePage({super.key});
@@ -15,6 +17,20 @@ class _RealEstatePageState extends State<RealEstatePage> {
   final List<IconData> categoryIcons = [Icons.home, Icons.bed, Icons.cabin];
   String selectedCity = "Où voulez-vous aller ?";
   String selectedDateInfo = "Quand · Avec qui";
+  final FavoritesService _favoritesService = FavoritesService();
+
+  @override
+  void initState() {
+    super.initState();
+    _initFavorites();
+  }
+
+  void _initFavorites() async {
+    await _favoritesService.init();
+    _favoritesService.onFavoritesChanged = () {
+      if (mounted) setState(() {});
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,77 +274,142 @@ class _RealEstatePageState extends State<RealEstatePage> {
     required double rating,
     required int reviews,
   }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image avec bouton favori
-          Stack(
-            children: [
-              Image.asset(
-                image,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: IconButton(
-                    icon: const Icon(Icons.favorite_border, color: Colors.red),
-                    onPressed: () {},
-                  ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => PropertyDetailPage(
+                  property: {
+                    'image': image,
+                    'location': location,
+                    'distance': distance,
+                    'dates': dates,
+                    'price': price,
+                    'rating': rating,
+                    'reviews': reviews,
+                  },
                 ),
-              ),
-            ],
           ),
-
-          // Infos logement
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      },
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image avec bouton favori
+            Stack(
               children: [
-                Text(
-                  location,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Image.asset(
+                  image,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
-                Text(distance, style: const TextStyle(color: Colors.grey)),
-                Text(dates, style: const TextStyle(color: Colors.grey)),
-                const SizedBox(height: 5),
-                Text(
-                  price,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.brown, size: 18),
-                    const SizedBox(width: 4),
-                    Text(
-                      "$rating ($reviews)",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.brown,
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: Icon(
+                        _favoritesService.isFavorite({
+                              'image': image,
+                              'location': location,
+                              'distance': distance,
+                              'dates': dates,
+                              'price': price,
+                              'rating': rating,
+                              'reviews': reviews,
+                            })
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: Colors.red,
                       ),
+                      onPressed: () async {
+                        await _favoritesService.toggleFavorite({
+                          'image': image,
+                          'location': location,
+                          'distance': distance,
+                          'dates': dates,
+                          'price': price,
+                          'rating': rating,
+                          'reviews': reviews,
+                        });
+                        setState(() {});
+
+                        // Afficher un message de confirmation
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              _favoritesService.isFavorite({
+                                    'image': image,
+                                    'location': location,
+                                    'distance': distance,
+                                    'dates': dates,
+                                    'price': price,
+                                    'rating': rating,
+                                    'reviews': reviews,
+                                  })
+                                  ? 'Ajouté aux favoris'
+                                  : 'Retiré des favoris',
+                            ),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      },
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+
+            // Infos logement
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    location,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(distance, style: const TextStyle(color: Colors.grey)),
+                  Text(dates, style: const TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 5),
+                  Text(
+                    price,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.brown, size: 18),
+                      const SizedBox(width: 4),
+                      Text(
+                        "$rating ($reviews)",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.brown,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

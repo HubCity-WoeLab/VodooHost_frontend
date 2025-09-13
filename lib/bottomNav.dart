@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_page.dart';
 import 'favorites.dart';
 import 'explore.dart';
 import 'travel.dart';
@@ -35,7 +36,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     const FavorisPage(),
     const TripsPage(),
     const InboxPage(),
-    const Center(child: Text("Profile Page")),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
