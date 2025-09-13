@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'search_results.dart';
 
 class GuestSelectionPage extends StatefulWidget {
   final String destination;
@@ -27,12 +28,12 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
   int pets = 0;
 
   Widget _buildCounter(
-    String title,
-    String subtitle,
-    int value,
-    VoidCallback onAdd,
-    VoidCallback onRemove,
-  ) {
+      String title,
+      String subtitle,
+      int value,
+      VoidCallback onAdd,
+      VoidCallback onRemove,
+      ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
@@ -161,9 +162,9 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                         icon: const Icon(Icons.close, color: Colors.brown),
                         onPressed:
                             () => Navigator.popUntil(
-                              context,
+                          context,
                               (route) => route.isFirst,
-                            ),
+                        ),
                       ),
                     ],
                   ),
@@ -276,10 +277,10 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                             "Adultes",
                             "13 ans ou plus",
                             adults,
-                            () {
+                                () {
                               setState(() => adults++);
                             },
-                            () {
+                                () {
                               if (adults > 1) setState(() => adults--);
                             },
                           ),
@@ -290,10 +291,10 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                             "Enfants",
                             "2 à 12 ans",
                             children,
-                            () {
+                                () {
                               setState(() => children++);
                             },
-                            () {
+                                () {
                               if (children > 0) setState(() => children--);
                             },
                           ),
@@ -304,10 +305,10 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                             "Nourrissons",
                             "Moins de 2 ans",
                             infants,
-                            () {
+                                () {
                               setState(() => infants++);
                             },
-                            () {
+                                () {
                               if (infants > 0) setState(() => infants--);
                             },
                           ),
@@ -318,10 +319,10 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                             "Animaux de compagnie",
                             "Vous amenez un animal ?",
                             pets,
-                            () {
+                                () {
                               setState(() => pets++);
                             },
-                            () {
+                                () {
                               if (pets > 0) setState(() => pets--);
                             },
                           ),
@@ -378,9 +379,9 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                     child: OutlinedButton(
                       onPressed:
                           () => Navigator.popUntil(
-                            context,
+                        context,
                             (route) => route.isFirst,
-                          ),
+                      ),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.brown),
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -411,8 +412,8 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                         elevation: 2,
                       ),
                       onPressed: () {
-                        // Retourner toutes les données sélectionnées
-                        Map<String, dynamic> result = {
+                        // Préparer toutes les données de recherche
+                        Map<String, dynamic> searchData = {
                           'destination': widget.destination,
                           'selectedDay': widget.selectedDay,
                           'endDay': widget.endDay,
@@ -423,8 +424,16 @@ class _GuestSelectionPageState extends State<GuestSelectionPage> {
                           'infants': infants,
                           'pets': pets,
                         };
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                        Navigator.pop(context, result);
+
+                        // Naviguer vers la page des résultats
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                SearchResultsPage(searchData: searchData),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.search, color: Colors.white),
                       label: const Text(

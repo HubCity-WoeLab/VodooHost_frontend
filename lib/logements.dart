@@ -28,11 +28,54 @@ class _LogementsState extends State<Logements> {
 
   Future<void> _submitLogement() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(
-      'accessToken',
-    ); // Le nom doit correspondre à celui utilisé lors du login
+    final token = prefs.getString('accessToken'); // Retrieve the access token
+    final userId = prefs.getString('userId'); // Retrieve the userId
 
-    final url = Uri.parse(AppConstants.createLogement);
+    if (userId == null || token == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Utilisateur non connecté.')),
+      );
+      return;
+    }
+
+    // Fetch hoteId from the backend
+    final hoteIdUrl = Uri.parse(AppConstants.getHoteId);
+    int? hoteId;
+
+    try {
+      final hoteResponse = await http.get(
+        hoteIdUrl,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (hoteResponse.statusCode == 200) {
+        final hoteData = jsonDecode(hoteResponse.body);
+        hoteId = hoteData['hoteId'];
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de la récupération de l\'hoteId: ${hoteResponse.body}')),
+        );
+        return;
+      }
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur réseau: $error')),
+      );
+      return;
+    }
+
+    if (hoteId == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Hôte non trouvé.')),
+      );
+      return;
+    }
 
     // Ensure `prix_journalier` is a number
     if (_logementData['prix'] == null ||
@@ -48,13 +91,15 @@ class _LogementsState extends State<Logements> {
     _logementData['prix_journalier'] = double.parse(_logementData['prix']);
     _logementData.remove('prix');
     _logementData['equipements'] = _selectedEquipments;
-    _logementData['disponibilites'] =
-        _selectedDateRange != null
-            ? [
-              _selectedDateRange!.start.toIso8601String(),
-              _selectedDateRange!.end.toIso8601String(),
-            ]
-            : [];
+    _logementData['disponibilites'] = _selectedDateRange != null
+        ? [
+            _selectedDateRange!.start.toIso8601String(),
+            _selectedDateRange!.end.toIso8601String(),
+          ]
+        : [];
+    _logementData['hoteId'] = hoteId; // Add the hoteId to the payload
+
+    final url = Uri.parse(AppConstants.createLogement);
 
     try {
       print('Envoi de la requête POST logement...');
@@ -62,7 +107,7 @@ class _LogementsState extends State<Logements> {
         url,
         headers: {
           'Content-Type': 'application/json',
-          if (token != null) 'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode(_logementData),
       );

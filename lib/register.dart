@@ -171,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      initialCountryCode: 'FR',
+                      initialCountryCode: 'TG',
                       onChanged: (phone) {
                         completePhoneNumber = phone.completeNumber;
                       },

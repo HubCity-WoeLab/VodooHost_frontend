@@ -9,6 +9,7 @@ import 'widget/constants.dart';
 import 'home_visitor.dart';
 import 'home_hote.dart';
 import 'widget/custom_text_form_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool rememberMe = false;
   bool isPasswordVisible = false;
+
+
 
   Future<void> loginUser(String email, String password) async {
     final url = Uri.parse(AppConstants.login);
@@ -37,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (responseData['accessToken'] != null) {
         final int? roleId = responseData['role'];
+        final int? userId = responseData['userId']; // Retrieve userId from response
         String role = '';
 
         if (roleId == 1) {
@@ -53,6 +57,13 @@ class _LoginPageState extends State<LoginPage> {
             SnackBar(content: Text('Rôle inconnu ou non pris en charge : $roleId')),
           );
           return;
+        }
+
+        // Store userId in SharedPreferences
+        if (userId != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('userId', userId);
+          log('User ID stored in SharedPreferences: $userId');
         }
 
         if (!mounted) return;
