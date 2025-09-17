@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 class AppConstants {
   // Base URL
 
-  // static const String baseUrl = 'http://192.168.1.71:3002/api'; //(maison-canal)
 
-  static const String baseUrl = 'http://10.214.52.68:3002/api';
+  // static const String baseUrl = 'http://10.214.52.68:3002/api';
 
-
-  // static const String baseUrl = 'http://192.168.1.69:3002/api'; //(maison-canal)
+  static const String baseUrl = 'http://192.168.1.90:3002/api'; //(maison-canal)
 
   // static const String baseUrl = 'http://192.168.16.108:3002/api'; //(maison-cec)
 
+
   // static const String baseUrl = 'http://192.168.1.72:3002/api'; // (Lab)
+  
+
 
   // API Endpoints
   static const String login = '$baseUrl/auth/login';
